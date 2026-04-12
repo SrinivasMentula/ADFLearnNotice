@@ -1,0 +1,66 @@
+{
+	"name": "df_PartitionProcessUnderstanding",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_ParquetData",
+						"type": "DatasetReference"
+					},
+					"name": "inboundParquetData"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_ParquetDataPartiioned",
+						"type": "DatasetReference"
+					},
+					"name": "partionedDataOutbound"
+				}
+			],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          hvfhs_license_num as string,",
+				"          dispatching_base_num as string,",
+				"          originating_base_num as string,",
+				"          request_datetime as string,",
+				"          on_scene_datetime as string,",
+				"          pickup_datetime as string,",
+				"          dropoff_datetime as string,",
+				"          PULocationID as integer,",
+				"          DOLocationID as integer,",
+				"          trip_miles as double,",
+				"          trip_time as long,",
+				"          base_passenger_fare as double,",
+				"          tolls as double,",
+				"          bcf as double,",
+				"          sales_tax as double,",
+				"          congestion_surcharge as double,",
+				"          airport_fee as double,",
+				"          tips as double,",
+				"          driver_pay as double,",
+				"          shared_request_flag as string,",
+				"          shared_match_flag as string,",
+				"          access_a_ride_flag as string,",
+				"          wav_request_flag as string,",
+				"          wav_match_flag as string,",
+				"          cbd_congestion_fee as double",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> inboundParquetData",
+				"inboundParquetData sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'parquet',",
+				"     rowUrlColumn:'shared_request_flag',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> partionedDataOutbound"
+			]
+		}
+	}
+}

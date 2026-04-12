@@ -1,0 +1,76 @@
+{
+	"name": "DF_sampleXMLData",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_SampleXML",
+						"type": "DatasetReference"
+					},
+					"name": "SampleXMLData"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_XMLFalttenedOutbound",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "select1"
+				},
+				{
+					"name": "flatten1"
+				},
+				{
+					"name": "pivot1"
+				},
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          catalog as (book as ({@id} as string, author as string, description as string, genre as string, price as double, publish_date as date, title as string)[])",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     validationMode: 'none',",
+				"     namespaces: true) ~> SampleXMLData",
+				"SampleXMLData select(mapColumn(",
+				"          books = catalog.book",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 foldDown(unroll(books),",
+				"     mapColumn(",
+				"          genre = books.genre,",
+				"          price = books.price,",
+				"          publish_date = books.publish_date",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten1",
+				"derivedColumn1 pivot(groupBy(price_category),",
+				"     pivotBy(genre),",
+				"     revenue_generated = sum(price),",
+				"     columnNaming: '$N$V',",
+				"     lateral: true) ~> pivot1",
+				"flatten1 derive(price_category = case(price >= 36 , 'Premium' ,price >= 10,'midrange' , 'lower')) ~> derivedColumn1",
+				"pivot1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
+			]
+		}
+	}
+}

@@ -1,0 +1,23 @@
+{
+	"name": "datafactoryLearnDev",
+	"properties": {
+		"globalParameters": {
+			"env": {
+				"type": "string",
+				"value": "Dev"
+			}
+		}
+	},
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned,UserAssigned",
+		"principalId": "da4e9050-2aae-461b-bb81-9b8aec7dd0f8",
+		"tenantId": "675380b9-575c-43fc-a696-a5f3809b55be",
+		"userAssignedIdentities": {
+			"/subscriptions/09b1704d-52a6-4805-9f92-2f0b66b025e2/resourcegroups/rg-databrickslearn-mentula/providers/Microsoft.ManagedIdentity/userAssignedIdentities/dataengineeeringmentula": {
+				"clientId": "db063082-64a1-4ce2-8d8a-2f91f5dcee7b",
+				"principalId": "6282d56d-2427-48a9-9874-8bf1becaee2c"
+			}
+		}
+	}
+}

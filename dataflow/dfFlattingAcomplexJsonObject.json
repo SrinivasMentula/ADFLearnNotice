@@ -1,0 +1,59 @@
+{
+	"name": "dfFlattingAcomplexJsonObject",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_SingleComplexJsonObject",
+						"type": "DatasetReference"
+					},
+					"name": "complexJsonDataSingle"
+				}
+			],
+			"sinks": [
+				{
+					"name": "DataOutbound"
+				}
+			],
+			"transformations": [
+				{
+					"name": "flatten2"
+				},
+				{
+					"name": "derivedColumn2"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          count as short,",
+				"          meta as (count as short, page_count as boolean, page_number as boolean, page_size as short),",
+				"          results as (id as integer, key as string)[],",
+				"          users as ({1000000} as (account_id as integer, disabled as boolean, email_address as string, full_name as string, generic as boolean, headline as string, id as integer, photo_path as string, update_whitelist as string[]), {2000000} as (account_id as integer, disabled as boolean, email_address as string, full_name as string, generic as boolean, headline as string, id as integer, photo_path as string, update_whitelist as string[]))",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'arrayOfDocuments') ~> complexJsonDataSingle",
+				"complexJsonDataSingle foldDown(unroll(results),",
+				"     mapColumn(",
+				"          id = results.id,",
+				"          key = results.key,",
+				"          users",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> flatten2",
+				"flatten2 derive(full_name = case(id==1000000,users.{1000000}.full_name,id==2000000,users.{2000000}.full_name),",
+				"          email = case(id==1000000,users.{1000000}.email_address,id==2000000,users.{2000000}.email_address)) ~> derivedColumn2",
+				"derivedColumn2 sink(validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     store: 'cache',",
+				"     format: 'inline',",
+				"     output: true,",
+				"     saveOrder: 1) ~> DataOutbound"
+			]
+		}
+	}
+}

@@ -1,0 +1,45 @@
+{
+	"name": "pl_surrogatedDataLoad",
+	"properties": {
+		"activities": [
+			{
+				"name": "surrogatedDataLoad",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "df_surrogatedEmployeesData",
+						"type": "DataFlowReference",
+						"datasetParameters": {
+							"employeesTableDB": {
+								"Databasename": "sqlDatabaseLearnMentula"
+							},
+							"LoadingDataIntoSQLTable": {
+								"Databasename": "sqlDatabaseLearnMentula"
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"folder": {
+			"name": "surrogatedPrimaryKey"
+		},
+		"annotations": [],
+		"lastPublishTime": "2026-04-05T03:02:26Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,19 @@
+{
+	"name": "DS_SampleXML",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_teststorageaccount",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Xml",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "samplexml",
+				"container": "jsondata"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

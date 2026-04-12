@@ -1,0 +1,34 @@
+{
+	"name": "ds_azureSQLDB",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_azuresqldatbase",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"databaseName": "sqlDatabaseLearnMentula"
+			}
+		},
+		"parameters": {
+			"schemaName": {
+				"type": "string"
+			},
+			"tableName": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": {
+				"value": "@dataset().schemaName",
+				"type": "Expression"
+			},
+			"table": {
+				"value": "@dataset().tableName",
+				"type": "Expression"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

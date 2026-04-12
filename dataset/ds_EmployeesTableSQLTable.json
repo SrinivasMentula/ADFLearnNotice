@@ -1,0 +1,70 @@
+{
+	"name": "ds_EmployeesTableSQLTable",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_azuresqldatbase",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"databaseName": {
+					"value": "@dataset().Databasename",
+					"type": "Expression"
+				}
+			}
+		},
+		"parameters": {
+			"Databasename": {
+				"type": "string",
+				"defaultValue": "sqlDatabaseLearnMentula"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "employee_id",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "first_name",
+				"type": "varchar"
+			},
+			{
+				"name": "gender",
+				"type": "varchar"
+			},
+			{
+				"name": "start_date",
+				"type": "varchar"
+			},
+			{
+				"name": "last_login_time",
+				"type": "varchar"
+			},
+			{
+				"name": "salary",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "bonus_percentage",
+				"type": "decimal",
+				"precision": 5,
+				"scale": 3
+			},
+			{
+				"name": "senior_management",
+				"type": "varchar"
+			},
+			{
+				"name": "team",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "surrogatedEmployeeExample"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

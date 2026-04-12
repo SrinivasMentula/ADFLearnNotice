@@ -1,0 +1,127 @@
+{
+	"name": "df_surrogatedEmployeesData",
+	"properties": {
+		"folder": {
+			"name": "SurrogatedKey"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_employeesData",
+						"type": "DatasetReference"
+					},
+					"name": "employeesdatafromfile"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_EmployeesTableSQLTable",
+						"type": "DatasetReference"
+					},
+					"name": "employeesTableDB"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_EmployeesTableSQLTable",
+						"type": "DatasetReference"
+					},
+					"name": "LoadingDataIntoSQLTable"
+				}
+			],
+			"transformations": [
+				{
+					"name": "surrogateKey1"
+				},
+				{
+					"name": "JoinStream"
+				},
+				{
+					"name": "surrogatedEmployeeId"
+				},
+				{
+					"name": "select1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          {First Name} as string,",
+				"          Gender as string,",
+				"          {Start Date} as string,",
+				"          {Last Login Time} as string,",
+				"          Salary as string,",
+				"          {Bonus %} as string,",
+				"          {Senior Management} as string,",
+				"          Team as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> employeesdatafromfile",
+				"source(output(",
+				"          maxEmployeeId as long",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     query: 'SELECT   coalesce(max( employee_id)  ,  0 ) as maxEmployeeId  FROM surrogatedEmployeeExample',",
+				"     format: 'query') ~> employeesTableDB",
+				"employeesdatafromfile keyGenerate(output(emplooyeeIdSurrohatedKey as long),",
+				"     startAt: 1L,",
+				"     stepValue: 1L) ~> surrogateKey1",
+				"surrogateKey1, employeesTableDB join(equals(1, 1),",
+				"     joinType:'cross',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> JoinStream",
+				"JoinStream derive(surrogatedEmpoyeeId = toInteger(emplooyeeIdSurrohatedKey)+toInteger(maxEmployeeId)) ~> surrogatedEmployeeId",
+				"surrogatedEmployeeId select(mapColumn(",
+				"          {First Name},",
+				"          Gender,",
+				"          {Start Date},",
+				"          {Last Login Time},",
+				"          Salary,",
+				"          {Bonus %},",
+				"          {Senior Management},",
+				"          Team,",
+				"          surrogatedEmpoyeeId",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          employee_id as long,",
+				"          first_name as string,",
+				"          gender as string,",
+				"          start_date as string,",
+				"          last_login_time as string,",
+				"          salary as integer,",
+				"          bonus_percentage as decimal(5,3),",
+				"          senior_management as string,",
+				"          team as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          employee_id = surrogatedEmpoyeeId,",
+				"          first_name = {First Name},",
+				"          gender = Gender,",
+				"          start_date = {Start Date},",
+				"          last_login_time = {Last Login Time},",
+				"          salary = Salary,",
+				"          bonus_percentage = {Bonus %},",
+				"          senior_management = {Senior Management},",
+				"          team = Team",
+				"     )) ~> LoadingDataIntoSQLTable"
+			]
+		}
+	}
+}

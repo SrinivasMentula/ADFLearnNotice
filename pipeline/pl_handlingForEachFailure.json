@@ -1,0 +1,199 @@
+{
+	"name": "pl_handlingForEachFailure",
+	"properties": {
+		"activities": [
+			{
+				"name": "Table_names",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "PipeRunD",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "tables_names",
+					"value": {
+						"value": "@createArray('columnMappings','unkown','emp_hierarchy')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Table_names",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@variables('tables_names')",
+						"type": "Expression"
+					},
+					"isSequential": false,
+					"activities": [
+						{
+							"name": "If Condition1",
+							"type": "IfCondition",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@variables('validationFalg')",
+									"type": "Expression"
+								},
+								"ifTrueActivities": [
+									{
+										"name": "Get Metadata1_copy1",
+										"type": "GetMetadata",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"dataset": {
+												"referenceName": "ds_azureSQLDB",
+												"type": "DatasetReference",
+												"parameters": {
+													"schemaName": "dbo",
+													"tableName": {
+														"value": "@item()",
+														"type": "Expression"
+													}
+												}
+											},
+											"fieldList": [
+												"columnCount"
+											]
+										}
+									},
+									{
+										"name": "updatingTheFlagVariable",
+										"type": "SetVariable",
+										"dependsOn": [
+											{
+												"activity": "Get Metadata1_copy1",
+												"dependencyConditions": [
+													"Failed"
+												]
+											}
+										],
+										"policy": {
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "validationFalg",
+											"value": {
+												"value": "@bool('false')",
+												"type": "Expression"
+											}
+										}
+									},
+									{
+										"name": "cancelingTheRunInParalellMode",
+										"type": "WebActivity",
+										"dependsOn": [
+											{
+												"activity": "Get Metadata1_copy1",
+												"dependencyConditions": [
+													"Failed"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"method": "POST",
+											"url": {
+												"value": "@concat('https://management.azure.com/subscriptions/09b1704d-52a6-4805-9f92-2f0b66b025e2/resourceGroups/rg-databrickslearn-mentula/providers/Microsoft.DataFactory/factories/',pipeline().DataFactory,'/pipelineruns/',pipeline().RunId,'/cancel?api-version=2018-06-01')",
+												"type": "Expression"
+											},
+											"authentication": {
+												"type": "MSI",
+												"resource": " https://management.azure.com/"
+											}
+										}
+									}
+								]
+							}
+						},
+						{
+							"name": "testWaitField",
+							"type": "Wait",
+							"dependsOn": [
+								{
+									"activity": "If Condition1",
+									"dependencyConditions": [
+										"Failed"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"waitTimeInSeconds": 10
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "PipeRunD",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "pl_pipelineURL",
+					"value": {
+						"value": "@concat('https://management.azure.com/subscriptions/09b1704d-52a6-4805-9f92-2f0b66b025e2/resourceGroups/rg-databrickslearn-mentula/providers/Microsoft.DataFactory/factories/',pipeline().DataFactory,'/pipelineruns/',pipeline().RunId,'/cancel?api-version=2018-06-01')",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"tables_names": {
+				"type": "Array"
+			},
+			"validationFalg": {
+				"type": "Boolean",
+				"defaultValue": true
+			},
+			"pl_pipelineURL": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2026-04-09T11:31:13Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

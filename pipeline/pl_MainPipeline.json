@@ -1,0 +1,61 @@
+{
+	"name": "pl_MainPipeline",
+	"properties": {
+		"activities": [
+			{
+				"name": "Execute Pipeline1",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pl_error_meesage_validation",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Execute Pipeline1",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "returnValue",
+					"value": {
+						"value": "@activity('Execute Pipeline1').output.pipelineReturnValue.ReturnVariable",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"returnValue": {
+				"type": "String"
+			},
+			"error_meesage": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Error_Handling"
+		},
+		"annotations": [],
+		"lastPublishTime": "2026-04-04T19:35:29Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

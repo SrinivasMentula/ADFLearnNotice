@@ -1,0 +1,52 @@
+{
+	"name": "DF_GeneratingFileNameToEachOfRowData",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_CSVData",
+						"type": "DatasetReference"
+					},
+					"name": "arrayJsondata"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_DatawithFileName",
+						"type": "DatasetReference"
+					},
+					"name": "DestinationData"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          {First Name} as string,",
+				"          Gender as string,",
+				"          {Start Date} as date,",
+				"          {Last Login Time} as string,",
+				"          Salary as integer,",
+				"          {Bonus %} as double,",
+				"          {Senior Management} as boolean,",
+				"          Team as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     rowUrlColumn: 'fileNameValue') ~> arrayJsondata",
+				"arrayJsondata derive(fileNameValue = substring(fileNameValue, 2, length(fileNameValue))) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> DestinationData"
+			]
+		}
+	}
+}

@@ -1,0 +1,72 @@
+{
+	"name": "pipeline1",
+	"properties": {
+		"activities": [
+			{
+				"name": "windowStartTime",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "startTime",
+					"value": {
+						"value": "@pipeline().parameters.windowStartTime",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "windowEndTime",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "windowStartTime",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "endTime",
+					"value": {
+						"value": "@pipeline().parameters.windowEndTime",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"windowStartTime": {
+				"type": "string",
+				"defaultValue": "This is a  testing value "
+			},
+			"windowEndTime": {
+				"type": "string",
+				"defaultValue": "This is a testing value 2"
+			}
+		},
+		"variables": {
+			"startTime": {
+				"type": "String"
+			},
+			"endTime": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "TumblingWindow"
+		},
+		"annotations": [],
+		"lastPublishTime": "2026-03-23T14:15:52Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

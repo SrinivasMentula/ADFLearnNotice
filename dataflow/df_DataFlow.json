@@ -1,0 +1,154 @@
+{
+	"name": "df_DataFlow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_jsonInbounndData",
+						"type": "DatasetReference"
+					},
+					"name": "InboundJsondata"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_jsonInbounndData",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_jsonInbounndData",
+						"type": "DatasetReference"
+					},
+					"name": "itemsDiscounts"
+				}
+			],
+			"sinks": [
+				{
+					"name": "sink1"
+				},
+				{
+					"linkedService": {
+						"referenceName": "ls_teststorageaccount",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sink3"
+				},
+				{
+					"linkedService": {
+						"referenceName": "ls_TestStorageAccon",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sink4"
+				}
+			],
+			"transformations": [
+				{
+					"name": "select1"
+				},
+				{
+					"name": "unrollByItemId"
+				},
+				{
+					"name": "itemDiscount"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          order_id as string,",
+				"          created_at as string,",
+				"          customer as (id as string, name as string, contacts as (type as string, value as string)[]),",
+				"          addresses as (billing as (line1 as string, city as string, state as string, zip as string), shipping as (type as string, line1 as string, city as string, geo as (lat as double, lng as double))[]),",
+				"          items as (item_id as string, product as (id as string, name as string), quantity as integer, price as (amount as integer, currency as string), discounts as (type as string, value as integer)[])[],",
+				"          payments as (method as string, status as string, transaction_id as string)[],",
+				"          shipment as (provider as string, tracking as (status as string, timestamp as string)[]),",
+				"          metadata as (source as string, experiment_flags as (new_checkout as boolean))",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'singleDocument') ~> InboundJsondata",
+				"source(output(",
+				"          order_id as string,",
+				"          created_at as string,",
+				"          customer as (id as string, name as string, contacts as (type as string, value as string)[]),",
+				"          addresses as (billing as (line1 as string, city as string, state as string, zip as string), shipping as (type as string, line1 as string, city as string, geo as (lat as double, lng as double))[]),",
+				"          items as (item_id as string, product as (id as string, name as string), quantity as integer, price as (amount as integer, currency as string), discounts as (type as string, value as integer)[])[],",
+				"          payments as (method as string, status as string, transaction_id as string)[],",
+				"          shipment as (provider as string, tracking as (status as string, timestamp as string)[]),",
+				"          metadata as (source as string, experiment_flags as (new_checkout as boolean))",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'singleDocument') ~> source1",
+				"source(output(",
+				"          order_id as string,",
+				"          created_at as string,",
+				"          customer as (id as string, name as string, contacts as (type as string, value as string)[]),",
+				"          addresses as (billing as (line1 as string, city as string, state as string, zip as string), shipping as (type as string, line1 as string, city as string, geo as (lat as double, lng as double))[]),",
+				"          items as (item_id as string, product as (id as string, name as string), quantity as integer, price as (amount as integer, currency as string), discounts as (type as string, value as integer)[])[],",
+				"          payments as (method as string, status as string, transaction_id as string)[],",
+				"          shipment as (provider as string, tracking as (status as string, timestamp as string)[]),",
+				"          metadata as (source as string, experiment_flags as (new_checkout as boolean))",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'singleDocument') ~> itemsDiscounts",
+				"InboundJsondata select(mapColumn(",
+				"          order_id,",
+				"          created_at,",
+				"          customerid = customer.id",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"source1 foldDown(unroll(items),",
+				"     mapColumn(",
+				"          order_id,",
+				"          item_id = items.item_id,",
+				"          product_id = items.product.id,",
+				"          product_name = items.product.name,",
+				"          total_qty = items.quantity,",
+				"          amount = items.price.amount,",
+				"          total_currency = items.price.currency",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> unrollByItemId",
+				"itemsDiscounts foldDown(unrollMultiple(items,items.discounts),",
+				"     mapColumn(",
+				"          item_id = items.item_id,",
+				"          product = items.product,",
+				"          quantity = items.quantity,",
+				"          price = items.price,",
+				"          discounts = items.discounts",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> itemDiscount",
+				"select1 sink(validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     store: 'cache',",
+				"     format: 'inline',",
+				"     output: false,",
+				"     saveOrder: 1) ~> sink1",
+				"itemDiscount sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'json',",
+				"     container: 'jsondata',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 1) ~> sink3",
+				"unrollByItemId sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'json',",
+				"     container: 'jsondata',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink4"
+			]
+		}
+	}
+}

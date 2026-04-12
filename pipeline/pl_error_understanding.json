@@ -1,0 +1,32 @@
+{
+	"name": "pl_error_understanding",
+	"properties": {
+		"activities": [
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "namesSrinivasMentula   ",
+					"value": {
+						"value": "@concat('This is a test String', 'String given as expected')",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"namesSrinivasMentula   ": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2026-04-08T13:04:38Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

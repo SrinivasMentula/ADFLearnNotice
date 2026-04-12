@@ -1,0 +1,112 @@
+{
+	"name": "pl_DynamicCreaationOfAdditinalColumns",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"additionalColumns": {
+							"type": "Expression",
+							"value": "@variables('finalDynamicValue')"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_azureSQLDB",
+						"type": "DatasetReference",
+						"parameters": {
+							"schemaName": "dbo",
+							"tableName": "columnMappings"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DS_DynamicColumnOutBound",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "finalDynamicValue",
+					"value": {
+						"value": "@json(replace(replace(string(variables('dynamic_columnName')),'dummyName','loadTime'),'dummy_value',utcNow()))",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"dynamic_columnName": {
+				"type": "String",
+				"defaultValue": "[{\"name\":\"dummyName\",\"value\":\"dummy_value\"}] }]"
+			},
+			"finalDynamicValue": {
+				"type": "Array"
+			},
+			"vaidationVariable": {
+				"type": "Array",
+				"defaultValue": [
+					{
+						"name": "dummyName",
+						"value": "dummy_value"
+					}
+				]
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2026-04-12T05:12:26Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,25 @@
+{
+	"name": "xml_outbound",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_DatalakeTestStorageAccoubt",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "testDummy.xml",
+				"folderPath": "xmlOutbound",
+				"fileSystem": "jsondata"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": false,
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,19 @@
+{
+	"name": "pl_ChildPipeline",
+	"properties": {
+		"activities": [
+			{
+				"name": "Wait1",
+				"type": "Wait",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"waitTimeInSeconds": 20
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2026-04-11T14:36:27Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

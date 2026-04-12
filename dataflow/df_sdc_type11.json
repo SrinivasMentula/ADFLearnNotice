@@ -1,0 +1,49 @@
+{
+	"name": "df_sdc_type11",
+	"properties": {
+		"type": "Flowlet",
+		"typeProperties": {
+			"sources": [],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "employeesDataFromFile"
+				},
+				{
+					"name": "employeesDataFromSQLTable"
+				},
+				{
+					"name": "output1"
+				}
+			],
+			"scriptLines": [
+				"input(output(",
+				"          {First Name} as string,",
+				"          Gender as string,",
+				"          {Start Date} as string,",
+				"          {Last Login Time} as string,",
+				"          Salary as integer,",
+				"          {Bonus %} as double,",
+				"          {Senior Management} as boolean,",
+				"          Team as string",
+				"     ),",
+				"     order: 0,",
+				"     allowSchemaDrift: true) ~> employeesDataFromFile",
+				"input(output(",
+				"          employee_id as long,",
+				"          first_name as string,",
+				"          gender as string,",
+				"          start_date as string,",
+				"          last_login_time as string,",
+				"          salary as integer,",
+				"          bonus_percentage as decimal(5,3),",
+				"          senior_management as string,",
+				"          team as string",
+				"     ),",
+				"     order: 1,",
+				"     allowSchemaDrift: true) ~> employeesDataFromSQLTable",
+				"employeesDataFromFile output() ~> output1"
+			]
+		}
+	}
+}

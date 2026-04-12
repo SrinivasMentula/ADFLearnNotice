@@ -1,0 +1,32 @@
+{
+	"name": "pl_CallingChildPipelineFromDifferentENV",
+	"properties": {
+		"activities": [
+			{
+				"name": "Web1",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "POST",
+					"url": "https://management.azure.com/subscriptions/09b1704d-52a6-4805-9f92-2f0b66b025e2/resourceGroups/rg-databrickslearn-mentula/providers/Microsoft.DataFactory/factories/datafactory-qa-mentula/pipelines/pl_calledChildPipeline/createRun?api-version=2018-06-01",
+					"body": "{\n   \"testSTring\" :'This is a  test String'\n}",
+					"authentication": {
+						"type": "MSI",
+						"resource": "https://management.azure.com"
+					}
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2026-04-12T03:45:40Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

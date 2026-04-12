@@ -1,0 +1,72 @@
+{
+	"name": "DF_JsonObjects",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ObjectsOfJosn",
+						"type": "DatasetReference"
+					},
+					"name": "jsonObjectsData"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_JsonnFlattendData",
+						"type": "DatasetReference"
+					},
+					"name": "flattendJSonAsCSV"
+				}
+			],
+			"transformations": [
+				{
+					"name": "jsonColumnToRows"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "select1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          student1 as (address as (city as string, pincode as integer), age as short, marks as (math as short, science as short), name as string),",
+				"          student2 as (address as (city as string, pincode as integer), age as short, marks as (math as short, science as short), name as string)",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     inferDriftedColumnTypes: true,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'singleDocument') ~> jsonObjectsData",
+				"derivedColumn1 unpivot(output(",
+				"          student_id as string,",
+				"          data as (address as (city as string, pincode as integer), age as short, marks as (math as short, science as short), name as string)",
+				"     ),",
+				"     ungroupBy(constant),",
+				"     lateral: true,",
+				"     ignoreNullPivots: false) ~> jsonColumnToRows",
+				"jsonObjectsData derive(constant = toInteger(1)) ~> derivedColumn1",
+				"jsonColumnToRows select(mapColumn(",
+				"          student_id,",
+				"          name = data.name,",
+				"          city = data.address.city,",
+				"          pincode = data.address.pincode,",
+				"          age = data.age,",
+				"          math = data.marks.math,",
+				"          science = data.marks.science",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     filePattern:(toString('testData')),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> flattendJSonAsCSV"
+			]
+		}
+	}
+}

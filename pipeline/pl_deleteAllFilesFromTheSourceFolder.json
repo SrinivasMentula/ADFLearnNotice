@@ -1,0 +1,55 @@
+{
+	"name": "pl_deleteAllFilesFromTheSourceFolder",
+	"properties": {
+		"activities": [
+			{
+				"name": "Delete1",
+				"type": "Delete",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "hospital_one",
+						"type": "DatasetReference",
+						"parameters": {
+							"conatinername": {
+								"value": "@pipeline().parameters.containername",
+								"type": "Expression"
+							}
+						}
+					},
+					"logStorageSettings": {
+						"linkedServiceName": {
+							"referenceName": "ls_storageAccount",
+							"type": "LinkedServiceReference"
+						},
+						"path": "deletelogs"
+					},
+					"enableLogging": true,
+					"storeSettings": {
+						"type": "AzureBlobStorageReadSettings",
+						"recursive": true,
+						"wildcardFileName": "*.csv",
+						"enablePartitionDiscovery": false
+					}
+				}
+			}
+		],
+		"parameters": {
+			"containername": {
+				"type": "string",
+				"defaultValue": "hospitalone"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2026-03-22T06:51:15Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

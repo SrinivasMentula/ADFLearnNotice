@@ -1,0 +1,63 @@
+{
+	"name": "DS_AzureAnuConetent4",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_TestStorageAccon",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "AzureContentQuestion4.json",
+				"container": "azurecontentanu"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"email": {
+					"type": "string"
+				},
+				"questions": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"questionid": {
+								"type": "integer"
+							},
+							"createtimestamp": {
+								"type": "string"
+							},
+							"content": {
+								"type": "string"
+							},
+							"answer": {
+								"type": "object",
+								"properties": {
+									"createtimestamp": {
+										"type": "string"
+									},
+									"content": {
+										"type": "string"
+									},
+									"presenterid": {
+										"type": "integer"
+									},
+									"presentername": {
+										"type": "string"
+									},
+									"privacy": {
+										"type": "string"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

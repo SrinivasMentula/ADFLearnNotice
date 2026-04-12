@@ -1,0 +1,29 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_AzureAnuConetent4",
+						"type": "DatasetReference"
+					},
+					"name": "AzureContenntAnu4"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          email as string,",
+				"          questions as (questionid as integer, createtimestamp as string, content as string, answer as (createtimestamp as string, content as string, presenterid as integer, presentername as string, privacy as string))[]",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'arrayOfDocuments') ~> AzureContenntAnu4"
+			]
+		}
+	}
+}

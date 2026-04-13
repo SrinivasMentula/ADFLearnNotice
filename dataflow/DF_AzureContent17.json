@@ -1,0 +1,43 @@
+{
+	"name": "DF_AzureContent17",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_employeesData",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "window1"
+				}
+			],
+			"scriptLines": [
+				"parameters{",
+				"     TestAggregatedValue as string (toString('This is srinivas mentula'))",
+				"}",
+				"source(output(",
+				"          {First Name} as string,",
+				"          Gender as string,",
+				"          {Start Date} as string,",
+				"          {Last Login Time} as string,",
+				"          Salary as integer,",
+				"          {Bonus %} as string,",
+				"          {Senior Management} as string,",
+				"          Team as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 window(over(Team),",
+				"     teamSalary = sum(Salary)) ~> window1"
+			]
+		}
+	}
+}

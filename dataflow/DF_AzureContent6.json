@@ -1,0 +1,25 @@
+{
+	"name": "DF_AzureContent6",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_AzureContent6",
+						"type": "DatasetReference"
+					},
+					"name": "AzureContent6Json"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'singleDocument') ~> AzureContent6Json"
+			]
+		}
+	}
+}

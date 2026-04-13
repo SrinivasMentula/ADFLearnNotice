@@ -1,0 +1,19 @@
+{
+	"name": "DS_AzureContent6",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_DatalakeTestStorageAccoubt",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "AzureContentQuestion4.json",
+				"fileSystem": "azurecontentanu"
+			}
+		},
+		"schema": {}
+	}
+}

@@ -1,0 +1,45 @@
+{
+	"name": "DF_ContentAzure7",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_AzureContent6",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "flatten1"
+				},
+				{
+					"name": "aggregate1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          value as (id as short, name as string, properties as (displayName as string))[]",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'singleDocument') ~> source1",
+				"source1 foldDown(unroll(value),",
+				"     mapColumn(",
+				"          id = value.id,",
+				"          name = value.name,",
+				"          displayName = value.properties.displayName",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten1",
+				"flatten1 aggregate(groupBy(id),",
+				"     value = collect(@(id = id , name = name ,displayname = displayName))) ~> aggregate1"
+			]
+		}
+	}
+}

@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "AzureContentQuestion4.json",
+				"fileName": "AzureContent7Json.json",
 				"fileSystem": "azurecontentanu"
 			}
 		},

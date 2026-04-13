@@ -16,6 +16,15 @@
 			"sheetIndex": 1,
 			"firstRowAsHeader": true
 		},
-		"schema": []
+		"schema": [
+			{
+				"name": "employeeId",
+				"type": "String"
+			},
+			{
+				"name": "name",
+				"type": "String"
+			}
+		]
 	}
 }

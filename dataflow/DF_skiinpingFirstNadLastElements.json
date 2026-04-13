@@ -1,0 +1,28 @@
+{
+	"name": "DF_skiinpingFirstNadLastElements",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ExcelSheet2",
+						"type": "DatasetReference"
+					},
+					"name": "excel2Data"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          employeeId as string,",
+				"          name as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> excel2Data"
+			]
+		}
+	}
+}

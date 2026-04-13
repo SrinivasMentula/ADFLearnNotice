@@ -12,8 +12,19 @@
 					"name": "excel2Data"
 				}
 			],
-			"sinks": [],
-			"transformations": [],
+			"sinks": [
+				{
+					"name": "DataAfterSkipingfRows"
+				}
+			],
+			"transformations": [
+				{
+					"name": "window1"
+				},
+				{
+					"name": "skipFirstAndLast3Rows"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          employeeId as string,",
@@ -21,7 +32,17 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> excel2Data"
+				"     ignoreNoFilesFound: false) ~> excel2Data",
+				"excel2Data window(highestEmployeeId = max(employeeId),",
+				"          lowestEmployeeId = min(employeeId)) ~> window1",
+				"window1 filter(((toInteger(employeeId) >=  toInteger(lowestEmployeeId)+ 3  ) ) && ((toInteger(employeeId)  <=  toInteger(highestEmployeeId) -3  ))) ~> skipFirstAndLast3Rows",
+				"skipFirstAndLast3Rows sink(validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     store: 'cache',",
+				"     format: 'inline',",
+				"     output: true,",
+				"     saveOrder: 1) ~> DataAfterSkipingfRows"
 			]
 		}
 	}

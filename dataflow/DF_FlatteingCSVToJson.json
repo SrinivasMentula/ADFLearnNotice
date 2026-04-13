@@ -44,7 +44,7 @@
 				"GeneratingJsonStructure aggregate(value = collect(@(employeeId = employeeId  , otherValues = otherFields))) ~> aggregate1",
 				"aggregate1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     partitionFileNames:['FlattenData'],",
+				"     partitionFileNames:['FlattenData.json'],",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",

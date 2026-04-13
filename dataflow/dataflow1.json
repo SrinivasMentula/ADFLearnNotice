@@ -12,8 +12,22 @@
 					"name": "AzureContenntAnu4"
 				}
 			],
-			"sinks": [],
-			"transformations": [],
+			"sinks": [
+				{
+					"name": "ArrayFlatening"
+				}
+			],
+			"transformations": [
+				{
+					"name": "flatteByQuestionsArray"
+				},
+				{
+					"name": "aggregate1"
+				},
+				{
+					"name": "derivedColumn1"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          email as string,",
@@ -22,7 +36,26 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
-				"     documentForm: 'arrayOfDocuments') ~> AzureContenntAnu4"
+				"     documentForm: 'arrayOfDocuments') ~> AzureContenntAnu4",
+				"AzureContenntAnu4 foldDown(unroll(questions),",
+				"     mapColumn(",
+				"          email,",
+				"          content = questions.content,",
+				"          answerContent = questions.answer.content",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatteByQuestionsArray",
+				"flatteByQuestionsArray aggregate(groupBy(email),",
+				"     qnsContent = collect(content +answerContent)) ~> aggregate1",
+				"aggregate1 derive(qnsContent1 = qnsContent[1],",
+				"          qnsContent2 = qnsContent[2]) ~> derivedColumn1",
+				"derivedColumn1 sink(validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     store: 'cache',",
+				"     format: 'inline',",
+				"     output: true,",
+				"     saveOrder: 1) ~> ArrayFlatening"
 			]
 		}
 	}

@@ -1,0 +1,21 @@
+{
+	"name": "ExcelSheet2",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_DatalakeTestStorageAccoubt",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "employeesDetails.xlsx",
+				"fileSystem": "azurecontentanu"
+			},
+			"sheetIndex": 1,
+			"firstRowAsHeader": true
+		},
+		"schema": []
+	}
+}

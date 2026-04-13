@@ -1,0 +1,57 @@
+{
+	"name": "DF_FlatteingCSVToJson",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DF_EmplloyeesEXcel",
+						"type": "DatasetReference"
+					},
+					"name": "employeesXL"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_FlattenJsonOutbound",
+						"type": "DatasetReference"
+					},
+					"name": "jsonOutboun"
+				}
+			],
+			"transformations": [
+				{
+					"name": "GeneratingJsonStructure"
+				},
+				{
+					"name": "aggregate1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          employeeId as string,",
+				"          {name } as string,",
+				"          {salary } as string,",
+				"          dept as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> employeesXL",
+				"employeesXL aggregate(groupBy(employeeId),",
+				"     otherFields = collect(@(name = {name } , dept = dept , salary = {salary }))) ~> GeneratingJsonStructure",
+				"GeneratingJsonStructure aggregate(value = collect(@(employeeId = employeeId  , otherValues = otherFields))) ~> aggregate1",
+				"aggregate1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['FlattenData'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> jsonOutboun"
+			]
+		}
+	}
+}

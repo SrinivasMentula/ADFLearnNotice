@@ -1,0 +1,38 @@
+{
+	"name": "DF_EmplloyeesEXcel",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_DatalakeTestStorageAccoubt",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "1",
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "employeesDetails.xlsx",
+				"fileSystem": "azurecontentanu"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": [
+			{
+				"name": "employeeId",
+				"type": "String"
+			},
+			{
+				"name": "name ",
+				"type": "String"
+			},
+			{
+				"name": "salary ",
+				"type": "String"
+			},
+			{
+				"name": "dept",
+				"type": "String"
+			}
+		]
+	}
+}

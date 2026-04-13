@@ -1,0 +1,50 @@
+{
+	"name": "DF_AzureConten7_2",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_AzureContent7_2",
+						"type": "DatasetReference"
+					},
+					"name": "jsonInbound"
+				}
+			],
+			"sinks": [
+				{
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "aggregate1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          ITMNBR as integer,",
+				"          BARCODE as string,",
+				"          SEQNO as integer,",
+				"          DESC as string,",
+				"          SERIALNO as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'arrayOfDocuments') ~> jsonInbound",
+				"jsonInbound aggregate(groupBy(ITMNBR,",
+				"          BARCODE),",
+				"     ITEM_LIST = collect(@(seqqno = SEQNO , DESC = DESC ,SERIALNO = SERIALNO ))) ~> aggregate1",
+				"aggregate1 sink(validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     store: 'cache',",
+				"     format: 'inline',",
+				"     output: true,",
+				"     saveOrder: 1) ~> sink1"
+			]
+		}
+	}
+}

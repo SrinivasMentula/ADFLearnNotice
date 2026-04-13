@@ -1,0 +1,38 @@
+{
+	"name": "DS_AzureContent7_2",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_DatalakeTestStorageAccoubt",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "AzureContent7_2.json",
+				"fileSystem": "azurecontentanu"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"ITMNBR": {
+					"type": "integer"
+				},
+				"BARCODE": {
+					"type": "string"
+				},
+				"SEQNO": {
+					"type": "integer"
+				},
+				"DESC": {
+					"type": "string"
+				},
+				"SERIALNO": {
+					"type": "integer"
+				}
+			}
+		}
+	}
+}

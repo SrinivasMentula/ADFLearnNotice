@@ -328,7 +328,6 @@
 								"value": "@variables('URL')",
 								"type": "Expression"
 							},
-							"body": {},
 							"authentication": {
 								"type": "MSI",
 								"resource": "https://management.azure.com"

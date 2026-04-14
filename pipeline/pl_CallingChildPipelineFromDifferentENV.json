@@ -5,7 +5,16 @@
 			{
 				"name": "Web1",
 				"type": "WebActivity",
-				"dependsOn": [],
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -16,8 +25,64 @@
 				"userProperties": [],
 				"typeProperties": {
 					"method": "POST",
-					"url": "https://management.azure.com/subscriptions/09b1704d-52a6-4805-9f92-2f0b66b025e2/resourceGroups/rg-databrickslearn-mentula/providers/Microsoft.DataFactory/factories/datafactory-qa-mentula/pipelines/pl_calledChildPipeline/createRun?api-version=2018-06-01",
-					"body": "{\n   \"testSTring\" :'This is a  test String'\n}",
+					"url": {
+						"value": "@variables('URL')",
+						"type": "Expression"
+					},
+					"body": {
+						"testSTring": "This is a  test String"
+					},
+					"authentication": {
+						"type": "MSI",
+						"resource": "https://management.azure.com/"
+					}
+				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "URL",
+					"value": {
+						"value": "@concat(' https://management.azure.com/subscriptions/09b1704d-52a6-4805-9f92-2f0b66b025e2/resourceGroups/QA-resourcegroup/providers/Microsoft.DataFactory/factories/datafactory-qa-mentula/pipelines/pl_calledChildPipeline/createRun?api-version=2018-06-01\n')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "WebHook1",
+				"type": "WebHook",
+				"dependsOn": [
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": {
+						"value": "@variables('URL')",
+						"type": "Expression"
+					},
+					"method": "POST",
+					"body": {
+						"testSTring": "This is a  test String"
+					},
+					"timeout": "00:10:00",
+					"reportStatusOnCallBack": true,
+					"disableCertValidation": true,
 					"authentication": {
 						"type": "MSI",
 						"resource": "https://management.azure.com/"
@@ -25,6 +90,11 @@
 				}
 			}
 		],
+		"variables": {
+			"URL": {
+				"type": "String"
+			}
+		},
 		"annotations": [],
 		"lastPublishTime": "2026-04-12T03:45:40Z"
 	},

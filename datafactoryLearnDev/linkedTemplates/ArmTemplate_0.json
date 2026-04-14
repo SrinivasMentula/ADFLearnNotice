@@ -274,7 +274,7 @@
 								"testSTring": "This is a  test String"
 							},
 							"timeout": "00:10:00",
-							"reportStatusOnCallBack": true,
+							"reportStatusOnCallBack": false,
 							"disableCertValidation": true,
 							"authentication": {
 								"type": "MSI",
@@ -328,6 +328,7 @@
 								"value": "@variables('URL')",
 								"type": "Expression"
 							},
+							"body": {},
 							"authentication": {
 								"type": "MSI",
 								"resource": "https://management.azure.com"

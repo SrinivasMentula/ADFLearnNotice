@@ -1916,7 +1916,6 @@
 														"value": "@concat('https://management.azure.com/subscriptions/09b1704d-52a6-4805-9f92-2f0b66b025e2/resourceGroups/rg-databrickslearn-mentula/providers/Microsoft.DataFactory/factories/',pipeline().DataFactory,'/pipelineruns/',pipeline().RunId,'/cancel?api-version=2018-06-01')",
 														"type": "Expression"
 													},
-													"body": {},
 													"authentication": {
 														"type": "MSI",
 														"resource": " https://management.azure.com/"

@@ -81,7 +81,7 @@
 						"testSTring": "This is a  test String"
 					},
 					"timeout": "00:10:00",
-					"reportStatusOnCallBack": false,
+					"reportStatusOnCallBack": true,
 					"disableCertValidation": true,
 					"authentication": {
 						"type": "MSI",

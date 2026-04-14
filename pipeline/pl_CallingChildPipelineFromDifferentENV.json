@@ -20,7 +20,7 @@
 					"body": "{\n   \"testSTring\" :'This is a  test String'\n}",
 					"authentication": {
 						"type": "MSI",
-						"resource": "https://management.azure.com"
+						"resource": "https://management.azure.com/"
 					}
 				}
 			}

@@ -1,0 +1,69 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "datafactoryLearnDev"
+		},
+		"LS_DatalakeTestStorageAccoubt_accountKey": {
+			"value": ""
+		},
+		"ls_Databricks_accessToken": {
+			"value": ""
+		},
+		"ls_DeltaLakeConnect_accessToken": {
+			"value": ""
+		},
+		"ls_TestStorageAccon_connectionString": {
+			"value": ""
+		},
+		"ls_UnityCatlogStorageAccount_connectionString": {
+			"value": ""
+		},
+		"ls_teststorageaccount_connectionString": {
+			"value": ""
+		},
+		"LS_DatalakeTestStorageAccoubt_properties_typeProperties_url": {
+			"value": "https://testqastorageacount.dfs.core.windows.net/"
+		},
+		"ls_Databricks_properties_typeProperties_existingClusterId": {
+			"value": "0327-151655-64b28pej"
+		},
+		"ls_azuresqldatbase_properties_typeProperties_server": {
+			"value": "sqlserverlearndev.database.windows.net"
+		},
+		"ls_azuresqldatbase_properties_typeProperties_database": {
+			"value": "@{linkedService().databaseName}"
+		},
+		"ls_azuresqldatbase_properties_typeProperties_userName": {
+			"value": "MentulaSrinivas"
+		},
+		"ls_keyvault_properties_typeProperties_baseUrl": {
+			"value": "https://learnkeyvaultmenthula.vault.azure.net/"
+		},
+		"ls_storageAccount_properties_typeProperties_serviceEndpoint": {
+			"value": "https://learndatabricksazure.blob.core.windows.net/"
+		},
+		"ls_storageAccount_properties_typeProperties_tenant": {
+			"value": "675380b9-575c-43fc-a696-a5f3809b55be"
+		},
+		"ls_storageAccount_properties_typeProperties_servicePrincipalId": {
+			"value": "722d4b82-a332-4fbb-98dd-c2d9dca1b3c5"
+		},
+		"eventTriggerExample_properties_typeProperties_scope": {
+			"value": "/subscriptions/09b1704d-52a6-4805-9f92-2f0b66b025e2/resourceGroups/rg-databrickslearn-mentula/providers/Microsoft.Storage/storageAccounts/learndatabricksazure"
+		},
+		"tumblingWindowExample_properties_pipeline_parameters_windowStartTime": {
+			"value": "@triggerOutputs().windowStartTime"
+		},
+		"tumblingWindowExample_properties_pipeline_parameters_windowEndTime": {
+			"value": "@triggerOutputs().windowEndTime"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}

@@ -1,0 +1,288 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "datafactoryLearnDev"
+		},
+		"LS_DatalakeTestStorageAccoubt_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'LS_DatalakeTestStorageAccoubt'"
+		},
+		"ls_Databricks_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'ls_Databricks'"
+		},
+		"ls_DeltaLakeConnect_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'ls_DeltaLakeConnect'"
+		},
+		"ls_TestStorageAccon_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_TestStorageAccon'"
+		},
+		"ls_UnityCatlogStorageAccount_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_UnityCatlogStorageAccount'"
+		},
+		"ls_teststorageaccount_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_teststorageaccount'"
+		},
+		"LS_DatalakeTestStorageAccoubt_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://testqastorageacount.dfs.core.windows.net/"
+		},
+		"ls_Databricks_properties_typeProperties_existingClusterId": {
+			"type": "string",
+			"defaultValue": "0327-151655-64b28pej"
+		},
+		"ls_azuresqldatbase_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "sqlserverlearndev.database.windows.net"
+		},
+		"ls_azuresqldatbase_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "@{linkedService().databaseName}"
+		},
+		"ls_azuresqldatbase_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "MentulaSrinivas"
+		},
+		"ls_keyvault_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://learnkeyvaultmenthula.vault.azure.net/"
+		},
+		"ls_storageAccount_properties_typeProperties_serviceEndpoint": {
+			"type": "string",
+			"defaultValue": "https://learndatabricksazure.blob.core.windows.net/"
+		},
+		"ls_storageAccount_properties_typeProperties_tenant": {
+			"type": "string",
+			"defaultValue": "675380b9-575c-43fc-a696-a5f3809b55be"
+		},
+		"ls_storageAccount_properties_typeProperties_servicePrincipalId": {
+			"type": "string",
+			"defaultValue": "722d4b82-a332-4fbb-98dd-c2d9dca1b3c5"
+		},
+		"eventTriggerExample_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/09b1704d-52a6-4805-9f92-2f0b66b025e2/resourceGroups/rg-databrickslearn-mentula/providers/Microsoft.Storage/storageAccounts/learndatabricksazure"
+		},
+		"tumblingWindowExample_properties_pipeline_parameters_windowStartTime": {
+			"type": "string",
+			"defaultValue": "@triggerOutputs().windowStartTime"
+		},
+		"tumblingWindowExample_properties_pipeline_parameters_windowEndTime": {
+			"type": "string",
+			"defaultValue": "@triggerOutputs().windowEndTime"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "datafactoryLearnDev_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"LS_DatalakeTestStorageAccoubt_accountKey": {
+						"value": "[parameters('LS_DatalakeTestStorageAccoubt_accountKey')]"
+					},
+					"ls_Databricks_accessToken": {
+						"value": "[parameters('ls_Databricks_accessToken')]"
+					},
+					"ls_DeltaLakeConnect_accessToken": {
+						"value": "[parameters('ls_DeltaLakeConnect_accessToken')]"
+					},
+					"ls_TestStorageAccon_connectionString": {
+						"value": "[parameters('ls_TestStorageAccon_connectionString')]"
+					},
+					"ls_UnityCatlogStorageAccount_connectionString": {
+						"value": "[parameters('ls_UnityCatlogStorageAccount_connectionString')]"
+					},
+					"ls_teststorageaccount_connectionString": {
+						"value": "[parameters('ls_teststorageaccount_connectionString')]"
+					},
+					"LS_DatalakeTestStorageAccoubt_properties_typeProperties_url": {
+						"value": "[parameters('LS_DatalakeTestStorageAccoubt_properties_typeProperties_url')]"
+					},
+					"ls_Databricks_properties_typeProperties_existingClusterId": {
+						"value": "[parameters('ls_Databricks_properties_typeProperties_existingClusterId')]"
+					},
+					"ls_keyvault_properties_typeProperties_baseUrl": {
+						"value": "[parameters('ls_keyvault_properties_typeProperties_baseUrl')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "datafactoryLearnDev_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'datafactoryLearnDev_ArmTemplate_0')]"
+			]
+		},
+		{
+			"name": "datafactoryLearnDev_ArmTemplate_2",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_2.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'datafactoryLearnDev_ArmTemplate_1')]"
+			]
+		},
+		{
+			"name": "datafactoryLearnDev_ArmTemplate_3",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_3.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"ls_azuresqldatbase_properties_typeProperties_server": {
+						"value": "[parameters('ls_azuresqldatbase_properties_typeProperties_server')]"
+					},
+					"ls_azuresqldatbase_properties_typeProperties_database": {
+						"value": "[parameters('ls_azuresqldatbase_properties_typeProperties_database')]"
+					},
+					"ls_azuresqldatbase_properties_typeProperties_userName": {
+						"value": "[parameters('ls_azuresqldatbase_properties_typeProperties_userName')]"
+					},
+					"ls_storageAccount_properties_typeProperties_serviceEndpoint": {
+						"value": "[parameters('ls_storageAccount_properties_typeProperties_serviceEndpoint')]"
+					},
+					"ls_storageAccount_properties_typeProperties_tenant": {
+						"value": "[parameters('ls_storageAccount_properties_typeProperties_tenant')]"
+					},
+					"ls_storageAccount_properties_typeProperties_servicePrincipalId": {
+						"value": "[parameters('ls_storageAccount_properties_typeProperties_servicePrincipalId')]"
+					},
+					"tumblingWindowExample_properties_pipeline_parameters_windowStartTime": {
+						"value": "[parameters('tumblingWindowExample_properties_pipeline_parameters_windowStartTime')]"
+					},
+					"tumblingWindowExample_properties_pipeline_parameters_windowEndTime": {
+						"value": "[parameters('tumblingWindowExample_properties_pipeline_parameters_windowEndTime')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'datafactoryLearnDev_ArmTemplate_2')]"
+			]
+		},
+		{
+			"name": "datafactoryLearnDev_ArmTemplate_4",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_4.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'datafactoryLearnDev_ArmTemplate_3')]"
+			]
+		},
+		{
+			"name": "datafactoryLearnDev_ArmTemplate_5",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_5.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'datafactoryLearnDev_ArmTemplate_4')]"
+			]
+		},
+		{
+			"name": "datafactoryLearnDev_ArmTemplate_6",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_6.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"eventTriggerExample_properties_typeProperties_scope": {
+						"value": "[parameters('eventTriggerExample_properties_typeProperties_scope')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'datafactoryLearnDev_ArmTemplate_5')]"
+			]
+		}
+	]
+}
